@@ -66,17 +66,13 @@ const timeEl  = document.getElementById('mockTime');
 const mockList = document.getElementById('mockVacancyList');
 
 // Статистика
-const statFillInvite    = document.getElementById('statFillInvite');
-const statFillReject    = document.getElementById('statFillReject');
-const statFillInterview = document.getElementById('statFillInterview');
-const statNumInvite     = document.getElementById('statNumInvite');
-const statNumReject     = document.getElementById('statNumReject');
-const statNumInterview  = document.getElementById('statNumInterview');
+const statNumInvite    = document.getElementById('statNumInvite');
+const statNumReject    = document.getElementById('statNumReject');
+const statNumInterview = document.getElementById('statNumInterview');
 let statsDisplayed = 0;
 let inviteCount = 0, rejectCount = 0, interviewCount = 0;
 let invitePending = 0, rejectPending = 0, interviewPending = 0;
 
-// Предварительно назначаем категорию каждому отклику
 function assignStats() {
   const target = Math.max(0, sentCount - 4);
   while (statsDisplayed < target) {
@@ -88,14 +84,12 @@ function assignStats() {
   }
 }
 
-function updateStatUI() {
-  const total = Math.max(inviteCount + rejectCount + interviewCount, 1);
-  statFillInvite.style.width    = (inviteCount    / total * 100) + '%';
-  statFillReject.style.width    = (rejectCount    / total * 100) + '%';
-  statFillInterview.style.width = (interviewCount / total * 100) + '%';
-  statNumInvite.textContent     = inviteCount;
-  statNumReject.textContent     = rejectCount;
-  statNumInterview.textContent  = interviewCount;
+function showPlusOne(el) {
+  const plus = document.createElement('span');
+  plus.className = 'stat-plus';
+  plus.textContent = '+1';
+  el.appendChild(plus);
+  setTimeout(() => plus.remove(), 900);
 }
 
 if (mockList && countEl && timeEl) {
@@ -106,11 +100,11 @@ if (mockList && countEl && timeEl) {
     timeEl.textContent = Math.floor(secs/60) + ':' + String(secs%60).padStart(2,'0');
   }, 1000);
 
-  // Назначаем категории часто, показываем каждую в своём ритме
+  // Назначаем категории часто, показываем каждую в своём ритме со всплывающим +1
   setInterval(assignStats, 1500);
-  setInterval(() => { if (invitePending   > 0) { inviteCount++;    invitePending--;    updateStatUI(); } }, 3000);
-  setInterval(() => { if (rejectPending   > 0) { rejectCount++;    rejectPending--;    updateStatUI(); } }, 4900);
-  setInterval(() => { if (interviewPending > 0) { interviewCount++; interviewPending--; updateStatUI(); } }, 7300);
+  setInterval(() => { if (invitePending   > 0) { inviteCount++;    invitePending--;    statNumInvite.textContent    = inviteCount;    showPlusOne(statNumInvite);    } }, 3000);
+  setInterval(() => { if (rejectPending   > 0) { rejectCount++;    rejectPending--;    statNumReject.textContent    = rejectCount;    showPlusOne(statNumReject);    } }, 4900);
+  setInterval(() => { if (interviewPending > 0) { interviewCount++; interviewPending--; statNumInterview.textContent = interviewCount; showPlusOne(statNumInterview); } }, 7300);
 
   function nextVacancy() {
     const active = mockList.querySelector('.mock-vacancy.active');
