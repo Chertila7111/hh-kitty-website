@@ -69,6 +69,9 @@ const mockList = document.getElementById('mockVacancyList');
 const statNumInvite    = document.getElementById('statNumInvite');
 const statNumReject    = document.getElementById('statNumReject');
 const statNumInterview = document.getElementById('statNumInterview');
+const statFillInvite   = document.getElementById('statFillInvite');
+const statFillReject   = document.getElementById('statFillReject');
+const statFillInterview = document.getElementById('statFillInterview');
 let statsDisplayed = 0;
 let inviteCount = 0, rejectCount = 0, interviewCount = 0;
 let invitePending = 0, rejectPending = 0, interviewPending = 0;
@@ -82,6 +85,14 @@ function assignStats() {
     else interviewPending++;
     statsDisplayed++;
   }
+}
+
+// Обновляет ширину баров пропорционально реальному распределению
+function updateBars() {
+  const total = Math.max(inviteCount + rejectCount + interviewCount, 1);
+  statFillInvite.style.width    = (inviteCount    / total * 100) + '%';
+  statFillReject.style.width    = (rejectCount    / total * 100) + '%';
+  statFillInterview.style.width = (interviewCount / total * 100) + '%';
 }
 
 function showPlusOne(el) {
@@ -102,9 +113,9 @@ if (mockList && countEl && timeEl) {
 
   // Назначаем категории часто, показываем каждую в своём ритме со всплывающим +1
   setInterval(assignStats, 1500);
-  setInterval(() => { if (invitePending   > 0) { inviteCount++;    invitePending--;    statNumInvite.textContent    = inviteCount;    showPlusOne(statNumInvite);    } }, 3000);
-  setInterval(() => { if (rejectPending   > 0) { rejectCount++;    rejectPending--;    statNumReject.textContent    = rejectCount;    showPlusOne(statNumReject);    } }, 4900);
-  setInterval(() => { if (interviewPending > 0) { interviewCount++; interviewPending--; statNumInterview.textContent = interviewCount; showPlusOne(statNumInterview); } }, 7300);
+  setInterval(() => { if (invitePending   > 0) { inviteCount++;    invitePending--;    statNumInvite.textContent    = inviteCount;    updateBars(); showPlusOne(statNumInvite);    } }, 3000);
+  setInterval(() => { if (rejectPending   > 0) { rejectCount++;    rejectPending--;    statNumReject.textContent    = rejectCount;    updateBars(); showPlusOne(statNumReject);    } }, 4900);
+  setInterval(() => { if (interviewPending > 0) { interviewCount++; interviewPending--; statNumInterview.textContent = interviewCount; updateBars(); showPlusOne(statNumInterview); } }, 7300);
 
   function nextVacancy() {
     const active = mockList.querySelector('.mock-vacancy.active');
