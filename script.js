@@ -60,19 +60,43 @@ const VACANCIES = [
 ];
 
 let vacIdx = 4; // следующая в очереди (первые 4 уже в HTML)
-let sentCount = 3;
-const countEl  = document.getElementById('mockCount');
-const remainEl = document.getElementById('mockRemaining');
-const timeEl   = document.getElementById('mockTime');
+let sentCount = 13;
+const countEl = document.getElementById('mockCount');
+const timeEl  = document.getElementById('mockTime');
 const mockList = document.getElementById('mockVacancyList');
 
-if (mockList && countEl && remainEl && timeEl) {
+// Статистика
+const statFillInvite    = document.getElementById('statFillInvite');
+const statFillReject    = document.getElementById('statFillReject');
+const statFillInterview = document.getElementById('statFillInterview');
+const statNumInvite     = document.getElementById('statNumInvite');
+const statNumReject     = document.getElementById('statNumReject');
+const statNumInterview  = document.getElementById('statNumInterview');
+let statsDisplayed = 0;
+
+function updateStats() {
+  const target = Math.max(0, sentCount - 4);
+  if (statsDisplayed >= target) return;
+  statsDisplayed = Math.min(statsDisplayed + Math.floor(Math.random() * 3) + 2, target);
+  const f = statsDisplayed / Math.max(sentCount, 1);
+  statFillInvite.style.width    = (f * 50) + '%';
+  statFillReject.style.width    = (f * 30) + '%';
+  statFillInterview.style.width = (f * 20) + '%';
+  statNumInvite.textContent     = Math.round(statsDisplayed * 0.5);
+  statNumReject.textContent     = Math.round(statsDisplayed * 0.3);
+  statNumInterview.textContent  = Math.round(statsDisplayed * 0.2);
+}
+
+if (mockList && countEl && timeEl) {
   // Таймер
   let secs = 0;
   setInterval(() => {
     secs++;
     timeEl.textContent = Math.floor(secs/60) + ':' + String(secs%60).padStart(2,'0');
   }, 1000);
+
+  // Статистика с задержкой ~5 сек
+  setInterval(updateStats, 5000);
 
   function nextVacancy() {
     const active = mockList.querySelector('.mock-vacancy.active');
@@ -85,7 +109,6 @@ if (mockList && countEl && remainEl && timeEl) {
     btn.innerHTML = '✓ Отклик';
     sentCount++;
     countEl.textContent = sentCount;
-    remainEl.textContent = Math.max(0, 100 - sentCount);
 
     // 2. Через 400мс добавляем новую карточку снизу
     setTimeout(() => {
