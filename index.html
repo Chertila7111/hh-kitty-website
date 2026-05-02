@@ -95,24 +95,28 @@
           </div>
           <div class="mock-panel">
             <div class="panel-top">
-              <span>✉ <span id="mockCount">13</span> откликов</span>
-              <span>⏱ <span id="mockTime">0:00</span></span>
+              <span class="panel-chip"><span class="chip-dot"></span>✉ <span id="mockCount">13</span> откликов</span>
+              <span class="panel-timer">⏱ <span id="mockTime">0:00</span></span>
             </div>
+            <div class="mock-stats-header">Результаты</div>
             <div class="mock-stats">
               <div class="mock-stat-row">
+                <div class="mock-stat-icon s-green">📨</div>
                 <span class="mock-stat-label">Приглашения</span>
                 <div class="mock-stat-track"><div class="mock-stat-fill s-green" id="statFillInvite"></div></div>
-                <span class="mock-stat-num" id="statNumInvite">0</span>
+                <span class="mock-stat-num s-green" id="statNumInvite">0</span>
               </div>
               <div class="mock-stat-row">
+                <div class="mock-stat-icon s-red">✗</div>
                 <span class="mock-stat-label">Отказы</span>
                 <div class="mock-stat-track"><div class="mock-stat-fill s-red" id="statFillReject"></div></div>
-                <span class="mock-stat-num" id="statNumReject">0</span>
+                <span class="mock-stat-num s-red" id="statNumReject">0</span>
               </div>
               <div class="mock-stat-row">
+                <div class="mock-stat-icon s-blue">🤝</div>
                 <span class="mock-stat-label">Собеседования</span>
                 <div class="mock-stat-track"><div class="mock-stat-fill s-blue" id="statFillInterview"></div></div>
-                <span class="mock-stat-num" id="statNumInterview">0</span>
+                <span class="mock-stat-num s-blue" id="statNumInterview">0</span>
               </div>
             </div>
           </div>
