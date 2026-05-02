@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Автоотклики от котика — автоматические отклики на hh.ru</title>
+  <meta name="description" content="Расширение для Chrome и Яндекс Браузера: автоматические отклики на вакансии hh.ru с сопроводительным письмом. Бесплатно — 100 откликов.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon">hh</div>
+        <span>Автоотклики от котика</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Возможности</a>
+        <a href="#how">Как работает</a>
+        <a href="#pricing">Тарифы</a>
+      </div>
+      <a href="https://chromewebstore.google.com/detail/автоотклики-от-котика/pnbbdheooelongppllcgnidkjlgdoohf" target="_blank" rel="noopener" class="btn btn-primary nav-cta">Скачать бесплатно</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <div class="hero-badge">🎁 100 откликов бесплатно</div>
+        <h1 class="hero-title">Работу<br>найдёт <span class="accent">котик</span></h1>
+        <p class="hero-sub">Расширение для браузера автоматически откликается на вакансии hh.ru с вашим сопроводительным письмом — пока вы пьёте кофе.</p>
+        <div class="hero-actions">
+          <a href="https://chromewebstore.google.com/detail/автоотклики-от-котика/pnbbdheooelongppllcgnidkjlgdoohf" target="_blank" rel="noopener" class="btn btn-primary btn-lg">
+            🐱 Скачать расширение
+          </a>
+          <a href="#how" class="btn btn-ghost btn-lg">Как это работает →</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-num" data-target="4200">0</span>
+            <span class="stat-label">пользователей</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" data-target="180000">0</span>
+            <span class="stat-label">откликов отправлено</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" data-target="94">0</span>
+            <span class="stat-label">% экономия времени</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card-mock">
+          <div class="mock-header">
+            <div class="mock-dot r"></div><div class="mock-dot y"></div><div class="mock-dot g"></div>
+            <span class="mock-title">hh.ru</span>
+          </div>
+          <div class="mock-body">
+            <div class="mock-vacancy">
+              <div class="mock-vline"></div>
+              <div class="mock-vtext">
+                <div class="mock-vtitle">Python-разработчик</div>
+                <div class="mock-vsub">Яндекс · от 200 000 ₽</div>
+              </div>
+              <div class="mock-vbtn sent">✓ Отклик</div>
+            </div>
+            <div class="mock-vacancy">
+              <div class="mock-vline"></div>
+              <div class="mock-vtext">
+                <div class="mock-vtitle">Frontend Developer</div>
+                <div class="mock-vsub">VK · от 180 000 ₽</div>
+              </div>
+              <div class="mock-vbtn sent">✓ Отклик</div>
+            </div>
+            <div class="mock-vacancy active">
+              <div class="mock-vline"></div>
+              <div class="mock-vtext">
+                <div class="mock-vtitle">Data Analyst</div>
+                <div class="mock-vsub">Сбер · от 150 000 ₽</div>
+              </div>
+              <div class="mock-vbtn loading">
+                <span class="spinner"></span>
+              </div>
+            </div>
+          </div>
+          <div class="mock-panel">
+            <div class="panel-label">🎁 Осталось 87 откликов</div>
+            <div class="panel-stats">
+              <span>✉ 13 откликов</span>
+              <span>⏱ 2:14</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-cat">
+          <svg viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg" class="cat-svg">
+            <g class="cat-body-group">
+              <!-- Тело -->
+              <ellipse cx="100" cy="120" rx="42" ry="36" fill="#F4A44B"/>
+              <ellipse cx="100" cy="116" rx="30" ry="24" fill="#E8912E" opacity="0.3"/>
+              <!-- Хвост -->
+              <path d="M58 110 Q35 90 40 65 Q43 75 55 90 Z" fill="#F4A44B" stroke="#E0851A" stroke-width="1"/>
+              <!-- Голова -->
+              <circle cx="100" cy="72" r="38" fill="#F4A44B"/>
+              <!-- Уши -->
+              <path d="M68 46 L55 18 L82 38 Z" fill="#F4A44B"/>
+              <path d="M68 46 L60 26 L78 40 Z" fill="#FFD4A8"/>
+              <path d="M132 46 L145 18 L118 38 Z" fill="#F4A44B"/>
+              <path d="M132 46 L140 26 L122 40 Z" fill="#FFD4A8"/>
+              <!-- Глаза -->
+              <circle cx="87" cy="68" r="7" fill="#1A1A2E"/>
+              <circle cx="113" cy="68" r="7" fill="#1A1A2E"/>
+              <circle cx="89" cy="66" r="2.5" fill="white"/>
+              <circle cx="115" cy="66" r="2.5" fill="white"/>
+              <!-- Нос и рот -->
+              <ellipse cx="100" cy="80" rx="4" ry="2.5" fill="#E07A6E"/>
+              <path d="M96 83 Q100 88 104 83" stroke="#1A1A2E" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <!-- Усы -->
+              <line x1="58" y1="76" x2="88" y2="79" stroke="#666" stroke-width="0.8"/>
+              <line x1="54" y1="81" x2="87" y2="82" stroke="#666" stroke-width="0.8"/>
+              <line x1="112" y1="79" x2="142" y2="76" stroke="#666" stroke-width="0.8"/>
+              <line x1="113" y1="82" x2="146" y2="81" stroke="#666" stroke-width="0.8"/>
+              <!-- Лапка с мышкой -->
+              <ellipse cx="130" cy="138" rx="18" ry="12" fill="#FFD4A8" class="cat-paw"/>
+              <ellipse cx="125" cy="134" rx="8" ry="6" fill="#F4A44B" opacity="0.5"/>
+              <ellipse cx="134" cy="134" rx="8" ry="6" fill="#F4A44B" opacity="0.5"/>
+            </g>
+            <!-- Галочки летят -->
+            <text x="155" y="55" font-size="18" fill="#50BE46" class="float-check c1">✓</text>
+            <text x="30" y="80" font-size="14" fill="#50BE46" class="float-check c2">✓</text>
+            <text x="165" y="100" font-size="12" fill="#50BE46" class="float-check c3">✓</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#0F1120"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-label">Возможности</div>
+      <h2 class="section-title">Котик работает,<br>пока вы отдыхаете</h2>
+      <div class="features-grid">
+        <div class="feature-card fade-in">
+          <div class="feature-icon">⚡</div>
+          <h3>Быстрые отклики</h3>
+          <p>Бот просматривает страницы поиска и откликается на каждую подходящую вакансию с задержкой как у живого человека.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <div class="feature-icon">✉️</div>
+          <h3>Ваше письмо</h3>
+          <p>Одно сопроводительное письмо подставляется в каждый отклик — напишите один раз и забудьте.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <div class="feature-icon">🌍</div>
+          <h3>Фильтр по стране</h3>
+          <p>Настройте: откликаться ли на зарубежные вакансии или пропускать их. Котик учтёт ваши предпочтения.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <div class="feature-icon">🔄</div>
+          <h3>Самовосстановление</h3>
+          <p>Если бот застрял — автоматически перезагружает страницу и продолжает с того же места.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <div class="feature-icon">🚫</div>
+          <h3>Анкеты — мимо</h3>
+          <p>Вакансии с обязательными анкетами запоминаются и навсегда пропускаются в следующих сессиях.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <div class="feature-icon">🌐</div>
+          <h3>Chrome и Яндекс</h3>
+          <p>Работает в Google Chrome и Яндекс Браузере без каких-либо дополнительных настроек.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="container">
+      <div class="section-label">Как работает</div>
+      <h2 class="section-title">Три шага до<br>первого интервью</h2>
+      <div class="steps">
+        <div class="step fade-in">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Установите расширение</h3>
+            <p>Скачайте и загрузите расширение в Chrome или Яндекс Браузер за 30 секунд.</p>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step fade-in">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Напишите письмо</h3>
+            <p>Вставьте ваше сопроводительное письмо в панель расширения. Один раз.</p>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step fade-in">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Запустите котика</h3>
+            <p>Откройте поиск вакансий на hh.ru, нажмите «Запустить» — и котик сделает всё сам.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="section-label">Тарифы</div>
+      <h2 class="section-title">Честная цена</h2>
+      <div class="pricing-grid pricing-grid-4">
+        <div class="pricing-card fade-in">
+          <div class="plan-name">Бесплатно</div>
+          <div class="plan-price">0 <span>₽</span></div>
+          <div class="plan-period">навсегда</div>
+          <ul class="plan-features">
+            <li>✅ 100 автооткликов</li>
+            <li>✅ Сопроводительное письмо</li>
+            <li>✅ Фильтр по стране</li>
+            <li>✅ Chrome + Яндекс Браузер</li>
+            <li class="no">❌ Безлимитные отклики</li>
+          </ul>
+          <a href="https://chromewebstore.google.com/detail/автоотклики-от-котика/pnbbdheooelongppllcgnidkjlgdoohf" target="_blank" rel="noopener" class="btn btn-ghost plan-btn">Скачать</a>
+        </div>
+        <div class="pricing-card fade-in">
+          <div class="plan-name">Неделя</div>
+          <div class="plan-price">199 <span>₽</span></div>
+          <div class="plan-period">7 дней</div>
+          <ul class="plan-features">
+            <li>✅ Безлимитные отклики</li>
+            <li>✅ Сопроводительное письмо</li>
+            <li>✅ Фильтр по стране</li>
+            <li>✅ Chrome + Яндекс Браузер</li>
+            <li>✅ Поддержка в Telegram</li>
+          </ul>
+          <a href="#" class="btn btn-ghost plan-btn plan-pay-btn" data-period="week">Оформить</a>
+        </div>
+        <div class="pricing-card featured fade-in">
+          <div class="plan-badge">Популярный</div>
+          <div class="plan-name">Месяц</div>
+          <div class="plan-price">299 <span>₽</span></div>
+          <div class="plan-period">30 дней</div>
+          <ul class="plan-features">
+            <li>✅ Безлимитные отклики</li>
+            <li>✅ Сопроводительное письмо</li>
+            <li>✅ Фильтр по стране</li>
+            <li>✅ Chrome + Яндекс Браузер</li>
+            <li>✅ Поддержка в Telegram</li>
+          </ul>
+          <a href="#" class="btn btn-primary plan-btn plan-pay-btn" data-period="month">Оформить</a>
+        </div>
+        <div class="pricing-card fade-in">
+          <div class="plan-badge plan-badge-gold">Выгодно</div>
+          <div class="plan-name">Год</div>
+          <div class="plan-price">999 <span>₽</span></div>
+          <div class="plan-period">365 дней · экономия 66%</div>
+          <ul class="plan-features">
+            <li>✅ Безлимитные отклики</li>
+            <li>✅ Сопроводительное письмо</li>
+            <li>✅ Фильтр по стране</li>
+            <li>✅ Chrome + Яндекс Браузер</li>
+            <li>✅ Поддержка в Telegram</li>
+          </ul>
+          <a href="#" class="btn btn-ghost plan-btn plan-pay-btn" data-period="year">Оформить</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALL -->
+  <section class="install" id="install">
+    <div class="container install-inner fade-in">
+      <div class="install-cat">🐱</div>
+      <h2>Готов помочь найти работу!</h2>
+      <p>Установите расширение из Chrome Web Store за один клик.<br>100 откликов — бесплатно и без регистрации.</p>
+      <div class="install-steps">
+        <div class="install-step">
+          <span class="install-num">1</span>
+          <span>Нажмите кнопку ниже</span>
+        </div>
+        <div class="install-step">
+          <span class="install-num">2</span>
+          <span>Нажмите «Добавить в Chrome»</span>
+        </div>
+        <div class="install-step">
+          <span class="install-num">3</span>
+          <span>Откройте hh.ru и нажмите кнопку котика</span>
+        </div>
+      </div>
+      <a href="https://chromewebstore.google.com/detail/автоотклики-от-котика/pnbbdheooelongppllcgnidkjlgdoohf" target="_blank" rel="noopener" class="btn btn-primary btn-lg install-btn">
+        🐱 Установить расширение
+      </a>
+      <p class="install-note">Вопросы? <a href="https://t.me/Directmentor" target="_blank">t.me/Directmentor</a></p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <div class="nav-logo-icon">hh</div>
+        <span>Автоотклики от котика</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://t.me/Directmentor" target="_blank">Поддержка</a>
+        <a href="#pricing">Тарифы</a>
+        <a href="https://chromewebstore.google.com/detail/автоотклики-от-котика/pnbbdheooelongppllcgnidkjlgdoohf" target="_blank" rel="noopener">Chrome Web Store</a>
+      </div>
+      <div class="footer-copy">© 2026 Автоотклики от котика</div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
