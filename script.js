@@ -89,6 +89,10 @@ if (mockList && countEl && remainEl && timeEl) {
 
     // 2. Через 400мс добавляем новую карточку снизу
     setTimeout(() => {
+      // Сначала удаляем лишние карточки (синхронно, до добавления новой)
+      const existing = Array.from(mockList.querySelectorAll('.mock-vacancy'));
+      for (let i = 0; i <= existing.length - 4; i++) existing[i].remove();
+
       const vac = VACANCIES[vacIdx % VACANCIES.length];
       vacIdx++;
 
@@ -109,14 +113,6 @@ if (mockList && countEl && remainEl && timeEl) {
         card.style.opacity = '1';
         card.style.transform = 'translateY(0)';
       }));
-
-      // Убираем первую карточку если их > 4
-      const cards = mockList.querySelectorAll('.mock-vacancy');
-      if (cards.length > 4) {
-        const old = cards[0];
-        old.style.cssText = 'opacity:0;transform:translateY(-8px);transition:opacity 0.25s,transform 0.25s;overflow:hidden';
-        setTimeout(() => old.remove(), 280);
-      }
     }, 400);
   }
 
