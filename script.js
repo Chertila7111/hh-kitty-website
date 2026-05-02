@@ -74,21 +74,21 @@ const statNumReject     = document.getElementById('statNumReject');
 const statNumInterview  = document.getElementById('statNumInterview');
 let statsDisplayed = 0;
 let inviteCount = 0, rejectCount = 0, interviewCount = 0;
+let invitePending = 0, rejectPending = 0, interviewPending = 0;
 
-function updateStats() {
+// Предварительно назначаем категорию каждому отклику
+function assignStats() {
   const target = Math.max(0, sentCount - 4);
-  if (statsDisplayed >= target) return;
-  const newTotal = Math.min(statsDisplayed + Math.floor(Math.random() * 3) + 2, target);
-
-  // Случайно распределяем каждый новый отклик ~50/30/20
-  for (let i = statsDisplayed; i < newTotal; i++) {
+  while (statsDisplayed < target) {
     const r = Math.random();
-    if (r < 0.50) inviteCount++;
-    else if (r < 0.80) rejectCount++;
-    else interviewCount++;
+    if (r < 0.50) invitePending++;
+    else if (r < 0.80) rejectPending++;
+    else interviewPending++;
+    statsDisplayed++;
   }
-  statsDisplayed = newTotal;
+}
 
+function updateStatUI() {
   const total = Math.max(inviteCount + rejectCount + interviewCount, 1);
   statFillInvite.style.width    = (inviteCount    / total * 100) + '%';
   statFillReject.style.width    = (rejectCount    / total * 100) + '%';
@@ -106,8 +106,11 @@ if (mockList && countEl && timeEl) {
     timeEl.textContent = Math.floor(secs/60) + ':' + String(secs%60).padStart(2,'0');
   }, 1000);
 
-  // Статистика с задержкой ~5 сек
-  setInterval(updateStats, 5000);
+  // Назначаем категории часто, показываем каждую в своём ритме
+  setInterval(assignStats, 1500);
+  setInterval(() => { if (invitePending   > 0) { inviteCount++;    invitePending--;    updateStatUI(); } }, 3000);
+  setInterval(() => { if (rejectPending   > 0) { rejectCount++;    rejectPending--;    updateStatUI(); } }, 4900);
+  setInterval(() => { if (interviewPending > 0) { interviewCount++; interviewPending--; updateStatUI(); } }, 7300);
 
   function nextVacancy() {
     const active = mockList.querySelector('.mock-vacancy.active');
