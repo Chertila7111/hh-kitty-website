@@ -163,8 +163,8 @@ body {
 .mock-stat-icon.s-blue  { background: rgba(74,158,255,.15); }
 .mock-stat-label { flex: 1; color: rgba(255,255,255,.55); font-size: 11px; }
 .mock-stat-track {
-  width: 72px; height: 4px; background: rgba(255,255,255,0.07);
-  border-radius: 3px; overflow: hidden; flex-shrink: 0;
+  flex: 1; height: 4px; background: rgba(255,255,255,0.07);
+  border-radius: 3px; overflow: hidden; min-width: 40px;
 }
 .mock-stat-fill { height: 100%; width: 0%; border-radius: 3px; transition: width 0.9s cubic-bezier(.4,0,.2,1); }
 .mock-stat-fill.s-green { background: linear-gradient(90deg,#28c840,#6dea7a); }

@@ -73,18 +73,29 @@ const statNumInvite     = document.getElementById('statNumInvite');
 const statNumReject     = document.getElementById('statNumReject');
 const statNumInterview  = document.getElementById('statNumInterview');
 let statsDisplayed = 0;
+let inviteCount = 0, rejectCount = 0, interviewCount = 0;
 
 function updateStats() {
   const target = Math.max(0, sentCount - 4);
   if (statsDisplayed >= target) return;
-  statsDisplayed = Math.min(statsDisplayed + Math.floor(Math.random() * 3) + 2, target);
-  const f = statsDisplayed / Math.max(sentCount, 1);
-  statFillInvite.style.width    = (f * 50) + '%';
-  statFillReject.style.width    = (f * 30) + '%';
-  statFillInterview.style.width = (f * 20) + '%';
-  statNumInvite.textContent     = Math.round(statsDisplayed * 0.5);
-  statNumReject.textContent     = Math.round(statsDisplayed * 0.3);
-  statNumInterview.textContent  = Math.round(statsDisplayed * 0.2);
+  const newTotal = Math.min(statsDisplayed + Math.floor(Math.random() * 3) + 2, target);
+
+  // Случайно распределяем каждый новый отклик ~50/30/20
+  for (let i = statsDisplayed; i < newTotal; i++) {
+    const r = Math.random();
+    if (r < 0.50) inviteCount++;
+    else if (r < 0.80) rejectCount++;
+    else interviewCount++;
+  }
+  statsDisplayed = newTotal;
+
+  const total = Math.max(inviteCount + rejectCount + interviewCount, 1);
+  statFillInvite.style.width    = (inviteCount    / total * 100) + '%';
+  statFillReject.style.width    = (rejectCount    / total * 100) + '%';
+  statFillInterview.style.width = (interviewCount / total * 100) + '%';
+  statNumInvite.textContent     = inviteCount;
+  statNumReject.textContent     = rejectCount;
+  statNumInterview.textContent  = interviewCount;
 }
 
 if (mockList && countEl && timeEl) {
