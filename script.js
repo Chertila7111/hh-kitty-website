@@ -173,3 +173,58 @@ function equalPricingHeight() {
 }
 window.addEventListener('load', equalPricingHeight);
 window.addEventListener('resize', equalPricingHeight);
+
+// Модальное окно оплаты
+const PAY_URL = 'https://script.google.com/macros/s/AKfycbxqPAbmEhV2W6-rTIWO9KNg9q3mPUHnHD2diAJxfUx0ylhMfmhSOe80T8z7zGGEjfSr/exec';
+const payOverlay  = document.getElementById('payOverlay');
+const payClose    = document.getElementById('payClose');
+const payPhone    = document.getElementById('payPhone');
+const payError    = document.getElementById('payError');
+const paySubmit   = document.getElementById('paySubmit');
+const payPlanLabel = document.getElementById('payPlanLabel');
+let currentPlan = 'month';
+
+function openPayModal(plan, label) {
+  currentPlan = plan;
+  payPlanLabel.textContent = '🎯 ' + label;
+  payPhone.value = '';
+  payError.classList.remove('show');
+  payOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => payPhone.focus(), 100);
+}
+
+function closePayModal() {
+  payOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Маска телефона
+payPhone.addEventListener('input', () => {
+  let d = payPhone.value.replace(/\D/g, '');
+  if (d.startsWith('8') && d.length <= 11) d = '7' + d.slice(1);
+  if (d.length > 0 && !d.startsWith('7')) d = '7' + d;
+  d = d.slice(0, 11);
+  let v = '+7';
+  if (d.length > 1) v += ' (' + d.slice(1, 4);
+  if (d.length >= 4) v += ') ' + d.slice(4, 7);
+  if (d.length >= 7) v += '-' + d.slice(7, 9);
+  if (d.length >= 9) v += '-' + d.slice(9, 11);
+  payPhone.value = v;
+  payError.classList.remove('show');
+});
+
+paySubmit.addEventListener('click', () => {
+  const digits = payPhone.value.replace(/\D/g, '');
+  if (digits.length < 11) { payError.classList.add('show'); payPhone.focus(); return; }
+  const phone = digits.startsWith('8') ? '7' + digits.slice(1) : digits;
+  window.location.href = PAY_URL + '?action=pay&plan=' + currentPlan + '&username=' + encodeURIComponent(phone);
+});
+
+document.querySelectorAll('.pay-open-btn').forEach(btn => {
+  btn.addEventListener('click', () => openPayModal(btn.dataset.plan, btn.dataset.label));
+});
+
+payClose.addEventListener('click', closePayModal);
+payOverlay.addEventListener('click', e => { if (e.target === payOverlay) closePayModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePayModal(); });

@@ -274,7 +274,7 @@
             <li>✅ Chrome + Яндекс Браузер</li>
             <li>✅ Поддержка в Telegram</li>
           </ul>
-          <a href="https://script.google.com/macros/s/AKfycbxqPAbmEhV2W6-rTIWO9KNg9q3mPUHnHD2diAJxfUx0ylhMfmhSOe80T8z7zGGEjfSr/exec?action=pay&plan=week" target="_blank" rel="noopener" class="btn btn-ghost plan-btn">Оформить</a>
+          <button class="btn btn-ghost plan-btn pay-open-btn" data-plan="week" data-label="Неделя — 199 ₽">Оформить</button>
         </div>
         <div class="pricing-card featured fade-in">
           <div class="plan-badge">Популярный</div>
@@ -289,7 +289,7 @@
             <li>✅ Chrome + Яндекс Браузер</li>
             <li>✅ Поддержка в Telegram</li>
           </ul>
-          <a href="https://script.google.com/macros/s/AKfycbxqPAbmEhV2W6-rTIWO9KNg9q3mPUHnHD2diAJxfUx0ylhMfmhSOe80T8z7zGGEjfSr/exec?action=pay&plan=month" target="_blank" rel="noopener" class="btn btn-primary plan-btn">Оформить</a>
+          <button class="btn btn-primary plan-btn pay-open-btn" data-plan="month" data-label="Месяц — 299 ₽">Оформить</button>
         </div>
         <div class="pricing-card fade-in">
           <div class="plan-badge plan-badge-gold">Выгоднее на 72%</div>
@@ -304,7 +304,7 @@
             <li>✅ Chrome + Яндекс Браузер</li>
             <li>✅ Поддержка в Telegram</li>
           </ul>
-          <a href="https://script.google.com/macros/s/AKfycbxqPAbmEhV2W6-rTIWO9KNg9q3mPUHnHD2diAJxfUx0ylhMfmhSOe80T8z7zGGEjfSr/exec?action=pay&plan=year" target="_blank" rel="noopener" class="btn btn-primary plan-btn">Оформить</a>
+          <button class="btn btn-ghost plan-btn pay-open-btn" data-plan="year" data-label="Год — 999 ₽">Оформить</button>
         </div>
       </div>
     </div>
@@ -352,6 +352,21 @@
       <div class="footer-copy">© 2026 Автоотклики от котика</div>
     </div>
   </footer>
+
+  <!-- Модальное окно оплаты -->
+  <div class="pay-overlay" id="payOverlay">
+    <div class="pay-modal">
+      <button class="pay-close" id="payClose">✕</button>
+      <div class="pay-logo">🐱</div>
+      <h2 class="pay-title">Автоотклики от котика</h2>
+      <div class="pay-plan" id="payPlanLabel"></div>
+      <label class="pay-label">Номер телефона от аккаунта hh.ru</label>
+      <input type="tel" class="pay-input" id="payPhone" placeholder="+7 (___) ___-__-__" maxlength="18" autocomplete="tel">
+      <div class="pay-error" id="payError">Введите полный номер телефона</div>
+      <button class="pay-submit" id="paySubmit">Перейти к оплате →</button>
+      <p class="pay-hint">Тот номер, которым вы регистрировались на hh.ru</p>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
