@@ -7,173 +7,131 @@ const observer = new IntersectionObserver((entries) => {
     }
   });
 }, { threshold: 0.12 });
-
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
 // Анимация счётчиков в hero
 function animateCounter(el, target) {
-  const duration = 1800;
-  const start = performance.now();
+  const duration = 1800, start = performance.now();
   const update = (now) => {
-    const progress = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const value = Math.floor(eased * target);
-    el.textContent = value >= 1000 ? (value / 1000).toFixed(value >= 10000 ? 0 : 1) + 'K+' : value + (target === 94 ? '%' : '');
-    if (progress < 1) requestAnimationFrame(update);
-    else el.textContent = target >= 1000 ? (target / 1000).toFixed(target >= 10000 ? 0 : 1) + 'K+' : target + (target === 94 ? '%' : '');
+    const p = Math.min((now - start) / duration, 1);
+    const v = Math.floor((1 - Math.pow(1 - p, 3)) * target);
+    el.textContent = v >= 1000 ? (v / 1000).toFixed(v >= 10000 ? 0 : 1) + 'K+' : v + (target === 94 ? '%' : '');
+    if (p < 1) requestAnimationFrame(update);
+    else el.textContent = target >= 1000 ? (target/1000).toFixed(target>=10000?0:1)+'K+' : target+(target===94?'%':'');
   };
   requestAnimationFrame(update);
 }
-
 const statsObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      document.querySelectorAll('.stat-num[data-target]').forEach(el => {
-        animateCounter(el, parseInt(el.dataset.target));
-      });
+      document.querySelectorAll('.stat-num[data-target]').forEach(el => animateCounter(el, parseInt(el.dataset.target)));
       statsObserver.disconnect();
     }
   });
 }, { threshold: 0.5 });
-
 const statsEl = document.querySelector('.hero-stats');
 if (statsEl) statsObserver.observe(statsEl);
 
-// Плавная подсветка активного пункта nav
+// Nav highlight
 const sections = document.querySelectorAll('section[id]');
 const navLinks = document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY + 80;
+  const y = window.scrollY + 80;
   sections.forEach(sec => {
-    if (scrollY >= sec.offsetTop && scrollY < sec.offsetTop + sec.offsetHeight) {
-      navLinks.forEach(a => {
-        a.style.color = a.getAttribute('href') === '#' + sec.id ? 'var(--orange)' : '';
-      });
-    }
+    if (y >= sec.offsetTop && y < sec.offsetTop + sec.offsetHeight)
+      navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + sec.id ? 'var(--orange)' : ''; });
   });
 }, { passive: true });
 
-// Анимация автооткликов в hero-mock
+// Анимация вакансий в hero-mock
 const VACANCIES = [
-  { title: 'Python-разработчик',     company: 'Яндекс',    salary: 'от 200 000 ₽' },
-  { title: 'Frontend Developer',      company: 'VK',        salary: 'от 180 000 ₽' },
-  { title: 'Data Analyst',            company: 'Сбер',      salary: 'от 150 000 ₽' },
-  { title: 'Product Manager',         company: 'Ozon',      salary: 'от 220 000 ₽' },
-  { title: 'Backend Engineer',        company: 'Авито',     salary: 'от 240 000 ₽' },
-  { title: 'UX/UI Designer',          company: 'Тинькофф', salary: 'от 160 000 ₽' },
-  { title: 'DevOps Engineer',         company: 'МТС',       salary: 'от 230 000 ₽' },
-  { title: 'iOS Developer',           company: '2ГИС',      salary: 'от 210 000 ₽' },
-  { title: 'Маркетолог',             company: 'Wildberries',salary: 'от 120 000 ₽' },
-  { title: 'React Developer',         company: 'СберМаркет',salary: 'от 195 000 ₽' },
-  { title: 'Аналитик данных',        company: 'Lamoda',    salary: 'от 140 000 ₽' },
-  { title: 'Project Manager',         company: 'Ростелеком',salary: 'от 130 000 ₽' },
+  { title: 'Python-разработчик',   company: 'Яндекс',     salary: 'от 200 000 ₽' },
+  { title: 'Frontend Developer',    company: 'VK',         salary: 'от 180 000 ₽' },
+  { title: 'Product Manager',       company: 'Ozon',       salary: 'от 220 000 ₽' },
+  { title: 'Data Analyst',          company: 'Сбер',       salary: 'от 150 000 ₽' },
+  { title: 'Backend Engineer',      company: 'Авито',      salary: 'от 240 000 ₽' },
+  { title: 'UX/UI Designer',        company: 'Тинькофф',  salary: 'от 160 000 ₽' },
+  { title: 'DevOps Engineer',       company: 'МТС',        salary: 'от 230 000 ₽' },
+  { title: 'iOS Developer',         company: '2ГИС',       salary: 'от 210 000 ₽' },
+  { title: 'Маркетолог',           company: 'Wildberries', salary: 'от 120 000 ₽' },
+  { title: 'React Developer',       company: 'СберМаркет', salary: 'от 195 000 ₽' },
+  { title: 'Аналитик данных',      company: 'Lamoda',      salary: 'от 140 000 ₽' },
+  { title: 'Project Manager',       company: 'Ростелеком', salary: 'от 130 000 ₽' },
 ];
 
-const VISIBLE = 4; // видимых карточек одновременно
-const list = document.getElementById('mockVacancyList');
-const countEl = document.getElementById('mockCount');
+let vacIdx = 4; // следующая в очереди (первые 4 уже в HTML)
+let sentCount = 3;
+const countEl  = document.getElementById('mockCount');
 const remainEl = document.getElementById('mockRemaining');
-const timeEl = document.getElementById('mockTime');
+const timeEl   = document.getElementById('mockTime');
+const mockList = document.getElementById('mockVacancyList');
 
-if (list) {
-  let queue = [...VACANCIES]; // очередь вакансий
-  let sent = 0;
-  let remaining = 100;
-  let seconds = 0;
-  let activeIdx = 0; // индекс активной карточки в DOM
-
-  // Создаём начальный набор карточек
-  function makeCard(vac, state) {
-    const el = document.createElement('div');
-    el.className = 'mock-vacancy' + (state === 'active' ? ' active' : '');
-    el.innerHTML = `
-      <div class="mock-vline"></div>
-      <div class="mock-vtext">
-        <div class="mock-vtitle">${vac.title}</div>
-        <div class="mock-vsub">${vac.company} · ${vac.salary}</div>
-      </div>
-      <div class="mock-vbtn ${state === 'sent' ? 'sent' : state === 'active' ? 'loading' : ''}">
-        ${state === 'sent' ? '✓ Отклик' : state === 'active' ? '<span class="spinner"></span>' : ''}
-      </div>`;
-    return el;
-  }
-
-  // Инициализация: показываем VISIBLE карточек
-  // первые VISIBLE-1 уже "отправлены", последняя — активна
-  const initial = queue.splice(0, VISIBLE);
-  initial.forEach((vac, i) => {
-    const state = i < VISIBLE - 1 ? 'sent' : 'active';
-    list.appendChild(makeCard(vac, state));
-  });
-  sent = VISIBLE - 1;
-  remaining = 100 - sent;
-  countEl.textContent = sent;
-  remainEl.textContent = remaining;
-
-  // Таймер времени
+if (mockList && countEl && remainEl && timeEl) {
+  // Таймер
+  let secs = 0;
   setInterval(() => {
-    seconds++;
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    timeEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+    secs++;
+    timeEl.textContent = Math.floor(secs/60) + ':' + String(secs%60).padStart(2,'0');
   }, 1000);
 
-  // Цикл обработки вакансий
-  function processNext() {
-    const cards = list.querySelectorAll('.mock-vacancy');
-    const activeCard = list.querySelector('.mock-vacancy.active');
-    if (!activeCard) return;
+  function nextVacancy() {
+    const active = mockList.querySelector('.mock-vacancy.active');
+    if (!active) return;
 
-    // Через 1.2с — помечаем активную как sent
+    // 1. Активная → отправлена
+    active.classList.remove('active');
+    const btn = active.querySelector('.mock-vbtn');
+    btn.className = 'mock-vbtn sent';
+    btn.innerHTML = '✓ Отклик';
+    sentCount++;
+    countEl.textContent = sentCount;
+    remainEl.textContent = Math.max(0, 100 - sentCount);
+
+    // 2. Через 400мс добавляем новую карточку снизу
     setTimeout(() => {
-      activeCard.classList.remove('active');
-      const btn = activeCard.querySelector('.mock-vbtn');
-      btn.className = 'mock-vbtn sent';
-      btn.innerHTML = '✓ Отклик';
+      const vac = VACANCIES[vacIdx % VACANCIES.length];
+      vacIdx++;
 
-      sent++;
-      remaining = Math.max(0, 100 - sent);
-      countEl.textContent = sent;
-      remainEl.textContent = remaining;
+      const card = document.createElement('div');
+      card.className = 'mock-vacancy active';
+      card.style.cssText = 'opacity:0;transform:translateY(8px);transition:opacity 0.3s,transform 0.3s';
+      card.innerHTML =
+        '<div class="mock-vline"></div>' +
+        '<div class="mock-vtext">' +
+          '<div class="mock-vtitle">' + vac.title + '</div>' +
+          '<div class="mock-vsub">' + vac.company + ' · ' + vac.salary + '</div>' +
+        '</div>' +
+        '<div class="mock-vbtn loading"><span class="spinner"></span></div>';
+      mockList.appendChild(card);
 
-      // Через 0.4с — добавляем новую карточку снизу и делаем её активной
-      setTimeout(() => {
-        // Берём следующую вакансию из очереди (циклично)
-        if (queue.length === 0) queue = [...VACANCIES];
-        const nextVac = queue.shift();
-        const newCard = makeCard(nextVac, 'active');
-        newCard.style.opacity = '0';
-        newCard.style.transform = 'translateY(10px)';
-        list.appendChild(newCard);
+      // Плавное появление
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }));
 
-        // Плавное появление
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            newCard.style.transition = 'opacity 0.3s, transform 0.3s';
-            newCard.style.opacity = '1';
-            newCard.style.transform = 'translateY(0)';
-          });
-        });
-
-        // Удаляем верхнюю карточку если их стало больше VISIBLE
-        const allCards = list.querySelectorAll('.mock-vacancy');
-        if (allCards.length > VISIBLE) {
-          const toRemove = allCards[0];
-          toRemove.style.transition = 'opacity 0.3s, transform 0.3s, max-height 0.3s';
-          toRemove.style.opacity = '0';
-          toRemove.style.transform = 'translateY(-10px)';
-          toRemove.style.maxHeight = '0';
-          toRemove.style.overflow = 'hidden';
-          toRemove.style.marginBottom = '0';
-          setTimeout(() => toRemove.remove(), 320);
-        }
-
-        // Следующий цикл
-        setTimeout(processNext, 1800);
-      }, 400);
-    }, 1200);
+      // Убираем первую карточку если их > 4
+      const cards = mockList.querySelectorAll('.mock-vacancy');
+      if (cards.length > 4) {
+        const old = cards[0];
+        old.style.cssText = 'opacity:0;transform:translateY(-8px);transition:opacity 0.25s,transform 0.25s;overflow:hidden';
+        setTimeout(() => old.remove(), 280);
+      }
+    }, 400);
   }
 
-  // Запуск с задержкой
-  setTimeout(processNext, 1400);
+  // Запуск цикла
+  setInterval(nextVacancy, 2200);
 }
+
+// Выравниваем высоту карточек тарифов
+function equalPricingHeight() {
+  const cards = document.querySelectorAll('.pricing-card');
+  cards.forEach(c => c.style.height = '');
+  if (window.innerWidth < 600) return;
+  let max = 0;
+  cards.forEach(c => { if (c.offsetHeight > max) max = c.offsetHeight; });
+  cards.forEach(c => c.style.height = max + 'px');
+}
+window.addEventListener('load', equalPricingHeight);
+window.addEventListener('resize', equalPricingHeight);

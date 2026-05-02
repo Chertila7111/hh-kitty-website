@@ -211,7 +211,9 @@ body {
 .pricing-card {
   background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
   padding: 36px 28px; position: relative;
+  display: flex; flex-direction: column;
 }
+.pricing-card .plan-features { flex: 1; }
 .pricing-card.featured { border-color: var(--orange); background: linear-gradient(135deg, var(--card), rgba(244,164,75,0.05)); }
 .plan-badge {
   position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
