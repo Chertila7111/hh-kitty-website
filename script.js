@@ -214,41 +214,92 @@ window.addEventListener('resize', equalPricingHeight);
     payError.classList.remove('show');
   }
 
-  payPhone.addEventListener('input', function () {
-    const pos = this.selectionStart;
-    const oldVal = this.value;
+  // ── Маска телефона (keydown-based, без дублирования) ──────────────────────
+  (function () {
+    var raw = ''; // до 10 пользовательских цифр (без кода страны)
 
-    // Count how many digits were before the cursor
-    let digitsBeforeCursor = 0;
-    for (let i = 0; i < pos; i++) {
-      if (/\d/.test(oldVal[i])) digitsBeforeCursor++;
+    function fmt(d) {
+      var v = '+7';
+      if (d.length > 0) v += ' (' + d.slice(0, 3);
+      if (d.length > 2) v += ')';
+      if (d.length > 3) v += ' ' + d.slice(3, 6);
+      if (d.length > 6) v += '-' + d.slice(6, 8);
+      if (d.length > 8) v += '-' + d.slice(8, 10);
+      return v;
     }
 
-    let d = oldVal.replace(/\D/g, '');
-    if (d.startsWith('8') && d.length <= 11) d = '7' + d.slice(1);
-    if (d.length > 0 && !d.startsWith('7')) d = '7' + d;
-    d = d.slice(0, 11);
-    let v = '+7';
-    if (d.length > 1) v += ' (' + d.slice(1, 4);
-    if (d.length > 4) v += ') ' + d.slice(4, 7);
-    if (d.length > 7) v += '-' + d.slice(7, 9);
-    if (d.length > 9) v += '-' + d.slice(9, 11);
-    this.value = v;
-
-    // Restore cursor: find position after same number of digits
-    let newPos = 0, digitCount = 0;
-    while (newPos < v.length && digitCount < digitsBeforeCursor) {
-      if (/\d/.test(v[newPos])) digitCount++;
-      newPos++;
+    // позиция курсора после n-й пользовательской цифры (0 = перед первой)
+    function posAfter(n, v) {
+      var dc = 0, ccSeen = false;
+      for (var i = 0; i < v.length; i++) {
+        if (/\d/.test(v[i])) {
+          if (!ccSeen) { ccSeen = true; continue; }
+          if (dc === n) return i;
+          dc++;
+        }
+      }
+      return v.length;
     }
-    this.selectionStart = this.selectionEnd = newPos;
 
-    payError.classList.remove('show');
-  });
+    // кол-во пользовательских цифр перед позицией курсора
+    function uBefore(pos) {
+      var v = payPhone.value, dc = 0, ccSeen = false;
+      for (var i = 0; i < pos && i < v.length; i++) {
+        if (/\d/.test(v[i])) {
+          if (!ccSeen) { ccSeen = true; continue; }
+          dc++;
+        }
+      }
+      return dc;
+    }
 
-  payPhone.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') paySubmit.click();
-  });
+    function commit(newRaw, curDigit) {
+      raw = newRaw.slice(0, 10);
+      var v = fmt(raw);
+      payPhone.value = v;
+      var p = posAfter(curDigit, v);
+      payPhone.setSelectionRange(p, p);
+      payError.classList.remove('show');
+    }
+
+    payPhone.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { paySubmit.click(); return; }
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      var s = payPhone.selectionStart, en = payPhone.selectionEnd, sel = s !== en;
+
+      if (/^\d$/.test(e.key)) {
+        e.preventDefault();
+        var at = uBefore(s), to = sel ? uBefore(en) : at;
+        var next = raw.slice(0, at) + e.key + raw.slice(to);
+        if (next.length <= 10) commit(next, at + 1);
+        return;
+      }
+      if (e.key === 'Backspace') {
+        e.preventDefault();
+        var at = uBefore(s);
+        if (sel) { commit(raw.slice(0, at) + raw.slice(uBefore(en)), at); }
+        else if (at > 0) { commit(raw.slice(0, at - 1) + raw.slice(at), at - 1); }
+        return;
+      }
+      if (e.key === 'Delete') {
+        e.preventDefault();
+        var at = uBefore(s);
+        if (sel) { commit(raw.slice(0, at) + raw.slice(uBefore(en)), at); }
+        else { commit(raw.slice(0, at) + raw.slice(at + 1), at); }
+        return;
+      }
+      if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Tab','Home','End'].indexOf(e.key) !== -1) return;
+      e.preventDefault();
+    });
+
+    payPhone.addEventListener('paste', function (e) {
+      e.preventDefault();
+      var d = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+      if (d.charAt(0) === '8' || d.charAt(0) === '7') d = d.slice(1);
+      commit(d, Math.min(d.length, 10));
+    });
+  }());
 
   paySubmit.addEventListener('click', function () {
     var identifier;
