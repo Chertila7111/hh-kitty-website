@@ -180,10 +180,14 @@ window.addEventListener('resize', equalPricingHeight);
   const payOverlay   = document.getElementById('payOverlay');
   const payClose     = document.getElementById('payClose');
   const payPhone     = document.getElementById('payPhone');
+  const payPhoneRow  = document.getElementById('payPhoneRow');
   const payError     = document.getElementById('payError');
   const paySubmit    = document.getElementById('paySubmit');
   const payPlanLabel = document.getElementById('payPlanLabel');
   if (!payOverlay || !payPhone) return;
+
+  // Если пришли из расширения — hhuid в URL
+  const urlHhuid = new URLSearchParams(window.location.search).get('hhuid') || '';
 
   let currentPlan = 'month';
 
@@ -192,9 +196,14 @@ window.addEventListener('resize', equalPricingHeight);
     payPlanLabel.textContent = '🎯 ' + label;
     payPhone.value = '';
     payError.classList.remove('show');
+    // Если hhuid есть — прячем поле телефона, идентификатор уже известен
+    if (payPhoneRow) payPhoneRow.style.display = urlHhuid ? 'none' : '';
+    if (urlHhuid) {
+      paySubmit.textContent = 'Перейти к оплате →';
+    }
     payOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
-    setTimeout(() => payPhone.focus(), 120);
+    if (!urlHhuid) setTimeout(() => payPhone.focus(), 120);
   }
 
   function closePayModal() {
@@ -221,12 +230,17 @@ window.addEventListener('resize', equalPricingHeight);
   });
 
   paySubmit.addEventListener('click', function () {
-    const digits = payPhone.value.replace(/\D/g, '');
-    if (digits.length < 11) { payError.classList.add('show'); payPhone.focus(); return; }
-    const phone = digits.startsWith('8') ? '7' + digits.slice(1) : digits;
+    var identifier;
+    if (urlHhuid) {
+      identifier = urlHhuid;
+    } else {
+      const digits = payPhone.value.replace(/\D/g, '');
+      if (digits.length < 11) { payError.classList.add('show'); payPhone.focus(); return; }
+      identifier = digits.startsWith('8') ? '7' + digits.slice(1) : digits;
+    }
     paySubmit.disabled = true;
     paySubmit.textContent = 'Загрузка...';
-    fetch(PAY_URL + '?action=pay&plan=' + currentPlan + '&username=' + encodeURIComponent(phone))
+    fetch(PAY_URL + '?action=pay&plan=' + currentPlan + '&username=' + encodeURIComponent(identifier))
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data.url) {
