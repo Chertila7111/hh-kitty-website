@@ -215,7 +215,16 @@ window.addEventListener('resize', equalPricingHeight);
   }
 
   payPhone.addEventListener('input', function () {
-    let d = this.value.replace(/\D/g, '');
+    const pos = this.selectionStart;
+    const oldVal = this.value;
+
+    // Count how many digits were before the cursor
+    let digitsBeforeCursor = 0;
+    for (let i = 0; i < pos; i++) {
+      if (/\d/.test(oldVal[i])) digitsBeforeCursor++;
+    }
+
+    let d = oldVal.replace(/\D/g, '');
     if (d.startsWith('8') && d.length <= 11) d = '7' + d.slice(1);
     if (d.length > 0 && !d.startsWith('7')) d = '7' + d;
     d = d.slice(0, 11);
@@ -225,6 +234,15 @@ window.addEventListener('resize', equalPricingHeight);
     if (d.length > 7) v += '-' + d.slice(7, 9);
     if (d.length > 9) v += '-' + d.slice(9, 11);
     this.value = v;
+
+    // Restore cursor: find position after same number of digits
+    let newPos = 0, digitCount = 0;
+    while (newPos < v.length && digitCount < digitsBeforeCursor) {
+      if (/\d/.test(v[newPos])) digitCount++;
+      newPos++;
+    }
+    this.selectionStart = this.selectionEnd = newPos;
+
     payError.classList.remove('show');
   });
 
