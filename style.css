@@ -233,7 +233,18 @@ body {
   font-weight: 700; cursor: pointer; transition: background 0.2s;
 }
 .pay-submit:hover { background: var(--orange-dark); }
-.pay-hint { font-size: 11px; color: rgba(255,255,255,0.28); margin-top: 12px; text-align: center; }
+.pay-phone-info {
+  display: flex; gap: 10px; align-items: flex-start;
+  background: rgba(244,164,75,0.08);
+  border: 1px solid rgba(244,164,75,0.28);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  font-size: 12px; line-height: 1.55;
+  color: rgba(255,255,255,0.6);
+}
+.pay-phone-info strong { display: block; color: rgba(255,255,255,0.9); font-size: 13px; margin-bottom: 2px; }
+.pay-phone-info-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
 
 /* Cat SVG */
 .hero-cat {
