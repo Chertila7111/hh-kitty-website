@@ -224,7 +224,26 @@ window.addEventListener('resize', equalPricingHeight);
     const digits = payPhone.value.replace(/\D/g, '');
     if (digits.length < 11) { payError.classList.add('show'); payPhone.focus(); return; }
     const phone = digits.startsWith('8') ? '7' + digits.slice(1) : digits;
-    window.location.href = PAY_URL + '?action=pay&plan=' + currentPlan + '&username=' + encodeURIComponent(phone);
+    paySubmit.disabled = true;
+    paySubmit.textContent = 'Загрузка...';
+    fetch(PAY_URL + '?action=pay&plan=' + currentPlan + '&username=' + encodeURIComponent(phone))
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          payError.textContent = 'Ошибка: ' + (data.error || 'попробуйте позже');
+          payError.classList.add('show');
+          paySubmit.disabled = false;
+          paySubmit.textContent = 'Перейти к оплате →';
+        }
+      })
+      .catch(function () {
+        payError.textContent = 'Ошибка соединения, попробуйте ещё раз';
+        payError.classList.add('show');
+        paySubmit.disabled = false;
+        paySubmit.textContent = 'Перейти к оплате →';
+      });
   });
 
   document.querySelectorAll('.pay-open-btn').forEach(function (btn) {
