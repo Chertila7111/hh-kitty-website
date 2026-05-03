@@ -209,6 +209,9 @@ window.addEventListener('resize', equalPricingHeight);
   function closePayModal() {
     payOverlay.classList.remove('open');
     document.body.style.overflow = '';
+    paySubmit.disabled = false;
+    paySubmit.textContent = 'Перейти к оплате →';
+    payError.classList.remove('show');
   }
 
   payPhone.addEventListener('input', function () {
